@@ -1,0 +1,75 @@
+<odoo>
+  <template id="custom_sale_report">
+    <t t-call="web.external_layout">
+
+      <main>
+        <div class="page">
+
+          <!-- ============= HEADER WITH LOGO RIGHT =============== -->
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 style="color: #2F75B5;">Sale Order Report</h2>
+          </div>
+
+          <br/>
+          <!-- =============CUSTOMER DETAILS BLOCKS =============== -->
+            <div style="width: 25%; margin-bottom: 40px; flex-wrap: nowrap;">
+                <!-- BOX (CUSTOMER) -->
+                <div style="flex: 1; min-width: 250px;">
+                    <div style="background: #7CB342; color: white; padding: 6px 10px; font-weight: bold;">Customer Detail</div>
+                        <div style=" padding: 5px;">
+                            <div><strong>Date:</strong> <t t-esc="docs.date_order"/></div>
+                            <div><strong>Customer:</strong> <t t-esc="docs.partner_id.name"/></div>
+                            <div><strong>Currency:</strong> <t t-esc="docs.currency_id.name"/></div>
+                        </div>
+                </div>
+            </div>
+
+          <!-- ============= PRODUCT TABLE =============== -->
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background-color: #2F75B5; color: white; text-align: center;">
+                <th style="padding: 10px; border: 1px solid #ddd;">Product</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Description</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Qty</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Unit Price</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Subtotal</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <t t-foreach="docs.order_line" t-as="line">
+                <tr t-att-style="(line.id % 2) == 0 and 'background:#f9f9f9;' or 'background:#ffffff;'">
+                  <td style="padding: 8px; border: 1px solid #ddd;"><t t-esc="line.product_id.name"/></td>
+                  <td style="padding: 8px; border: 1px solid #ddd;"><t t-esc="line.name"/></td>
+                  <td style="padding: 8px; border: 1px solid #ddd; text-align:right;"><t t-esc="line.product_uom_qty"/></td>
+
+                  <td style="padding: 8px; border: 1px solid #ddd; text-align:right;">
+                    <span t-field="line.price_unit"
+                          t-options='{"widget": "monetary", "display_currency": docs.currency_id}'/>
+                  </td>
+
+                  <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">
+                    <span t-field="line.price_subtotal"
+                          t-options='{"widget": "monetary", "display_currency": docs.currency_id}'/>
+                  </td>
+                </tr>
+              </t>
+            </tbody>
+
+            <tfoot>
+              <tr style="background-color: #f2f2f2; font-weight: bold; text-align: right;">
+                <td colspan="4" style="padding: 10px; border: 1px solid #ddd;">Total:</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">
+                  <span t-field="docs.amount_total"
+                        t-options='{"widget": "monetary", "display_currency": docs.currency_id}'/>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+
+        </div>
+      </main>
+
+    </t>
+  </template>
+</odoo>
